@@ -1,0 +1,34 @@
+import { format, getTime, formatDistanceToNow } from "date-fns";
+
+// ----------------------------------------------------------------------
+
+export function fDate(date, newFormat) {
+  const fm = newFormat || "dd MMM yyyy";
+  console.log(date);
+  console.log(date === 'undefined')
+  if (date) {
+    console.log("====================================");
+    console.log(date);
+    console.log("====================================");
+    return format(new Date(date), fm);
+  }
+  return "";
+}
+
+export function fDateTime(date, newFormat) {
+  const fm = newFormat || "dd MMM yyyy p";
+
+  return date ? format(new Date(date), fm) : "";
+}
+
+export function fTimestamp(date) {
+  return date ? getTime(new Date(date)) : "";
+}
+
+export function fToNow(date) {
+  return date
+    ? formatDistanceToNow(new Date(date), {
+        addSuffix: true,
+      })
+    : "";
+}
