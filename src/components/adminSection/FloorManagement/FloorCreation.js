@@ -1,4 +1,12 @@
-import { Box, Button, Container, Grid, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import AddInput from "./AddInput";
 
@@ -17,11 +25,11 @@ const FloorCreation = () => {
   };
   return (
     <Container>
-      <Stack>
+      {/* <Stack>
         <Typography variant="h4" color={"#9f2936"} component="h2">
           Create Floor
         </Typography>
-      </Stack>
+      </Stack> */}
       <Stack>
         <AddInput />
       </Stack>

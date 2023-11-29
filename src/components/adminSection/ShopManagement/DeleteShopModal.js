@@ -71,7 +71,11 @@ const DeleteShopModal = ({ id, getFloorData, shopDetails, handleGetShop }) => {
           return (
             <Grid
               item
-              xs={2}
+              // xs={2}
+              xs={12}
+              sm={5.75}
+              md={3.75}
+              lg={2.75}
               key={index}
               flexDirection={"row"}
               sx={{
@@ -158,12 +162,17 @@ const DeleteShopModal = ({ id, getFloorData, shopDetails, handleGetShop }) => {
             Delete Shop
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Are You Sure to want to delete this Shop
+            Are you sure to want to delete this Shop ?
           </Typography>
-          <Button onClick={handleOpen} sx={{ mt: 2, marginRight: "1rem" }}>
+          <Button
+            variant="contained"
+            onClick={handleOpen}
+            sx={{ mt: 2, marginRight: "1rem" }}
+          >
             Cancel
           </Button>
           <Button
+            variant="contained"
             onClick={() =>
               //  console.log("deleteId", id)
               handleDelete(shopId)

@@ -22,7 +22,7 @@ import AddWellnessBoard from "./components/adminSection/WellnessBoard/AddWellnes
 import CreateInvoiceForm from "./components/adminSection/CreateUser/CreateInvoiceForm";
 import AmmenityRequestHome from "./components/adminSection/AmmenityRequest/AmmenityRequestHome";
 import RequestAcceptModal from "./components/adminSection/MaintenaceRequests/RequestAcceptModal";
-
+import ProfileUpdate from "./components/ProfileUpdate/ProfileUpdate";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -34,6 +34,7 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: "app", element: <DashboardAppPage /> },
         { path: "user", element: <UserPage /> },
+        { path: "/dashboard/profile", element: <ProfileUpdate /> },
         {
           path: "/dashboard/user/createUser",
           element: <UserForm />,

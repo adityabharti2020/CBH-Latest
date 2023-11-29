@@ -171,18 +171,33 @@ const AddAmmenityInput = () => {
     getAmmenityData();
   }, []);
   const inputFieldDelete = (id) => {
-    if (id !== 0) {
-      const updatedItems = [...inputFields];
-      const indexToDelete = updatedItems.findIndex((item) => item.id === id);
-      updatedItems.splice(indexToDelete, 1);
-      setInputFields(updatedItems);
-    }
+    const updatedItems = [...inputFields];
+    const indexToDelete = updatedItems.findIndex((item) => item.id === id);
+    updatedItems.splice(indexToDelete, 1);
+    setInputFields(updatedItems);
   };
   return (
     <>
-    {/* <Stack sx={{display:"flex",justifyContent:}}>
-
-    </Stack> */}
+      {/* <Grid item style={{ marginTop: "0.8rem", color: "#9f2936" }}></Grid> */}
+      <Stack
+        display={"flex"}
+        flexDirection={"row"}
+        justifyContent={"space-between"}
+        marginBottom={2}
+      >
+        <Typography variant="h4" component="h2" sx={{ color: "#9f2936" }}>
+          Create Amenities
+        </Typography>
+        <Button
+          variant="contained"
+          type="button"
+          onClick={handleAddField}
+          // style={{ margin: "10px" }}
+          startIcon={<Iconify icon="fluent:add-12-filled" />}
+        >
+          Add Amenity
+        </Button>
+      </Stack>
       <form onSubmit={handleSubmit}>
         <Grid container rowGap={1} columnGap={1}>
           {inputFields?.map((inputField, index) => (
@@ -193,17 +208,17 @@ const AddAmmenityInput = () => {
               container
               rowGap={1}
               columnGap={1}
-              xs={12}
+              // xs={12}
               sx={{ position: "relative" }}
-              md={5.75}
-              justifyContent={"start"}
+              // md={5.75}
+              justifyContent={"space-between"}
               p={1}
-              border={"1px solid black"}
+              // border={"1px solid black"}
               alignItems={"center"}
               mt={1.5}
               direction={"row"}
             >
-              <Grid item xs={12} sm={4.75} key={index}>
+              <Grid item xs={12} sm={3.75} key={index}>
                 <TextField
                   name="amenityName"
                   required
@@ -218,7 +233,7 @@ const AddAmmenityInput = () => {
               <Grid item xs={12} sm={3.75} key={index}>
                 <TextField
                   // sx={{ marginLeft: "1rem" }}
-                  className="textfield"
+
                   name="basePrice"
                   size="small"
                   fullWidth
@@ -229,11 +244,10 @@ const AddAmmenityInput = () => {
                   onChange={(event) => handleInputChange(event, index)}
                 />
               </Grid>
-              <Grid item xs={12} sm={3} key={index}>
+              <Grid item xs={12} sm={3.75} key={index}>
                 <TextField
                   // sx={{ marginLeft: "1rem" }}
                   id="outlined-adornment-amount"
-                  className="textfield"
                   name="GST"
                   size="small"
                   fullWidth
@@ -253,12 +267,20 @@ const AddAmmenityInput = () => {
                 sx={{ position: "absolute", top: -18, right: -17 }}
                 key={index}
               >
-                <IconButton
-                  sx={{ color: "#9f2936", fontSize: "18px" }}
-                  onClick={() => inputFieldDelete(index)}
-                >
-                  <Iconify icon={index === 0 ? "" : "radix-icons:cross-2"} />
-                </IconButton>
+                {inputFields?.length !== 1 && (
+                  <IconButton
+                    // sx={{ color: "#9f2936", fontSize: "18px" }}
+                    sx={{
+                      color: "#9f2936",
+                      bgcolor: "rgba(233,206,198,1)",
+                      height: "30px",
+                      width: "30px",
+                    }}
+                    onClick={() => inputFieldDelete(index)}
+                  >
+                    <Iconify icon={"radix-icons:cross-2"} />
+                  </IconButton>
+                )}
               </Box>
 
               {/* <Grid item xs={12} sm={2}>
@@ -276,18 +298,20 @@ const AddAmmenityInput = () => {
             </Grid>
           ))}
         </Grid>
-        <Button
+        {/* <Button
+          variant="contained"
           type="button"
           onClick={handleAddField}
-          style={{ margin: "10px", backgroundColor: " #9F2936",
-          color: "white", }}
+          style={{ margin: "10px" }}
+          startIcon={<Iconify icon="fluent:add-12-filled" />}
         >
-          Add Input Field
-        </Button>
+          Add Amenity
+        </Button> */}
         <Button
+          variant="contained"
           type="submit"
-          style={{ margin: "10px",  backgroundColor: " #9F2936",
-          color: "white", }}
+          size="small"
+          style={{ margin: "10px" }}
         >
           Submit
         </Button>

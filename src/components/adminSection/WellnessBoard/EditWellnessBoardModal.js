@@ -104,8 +104,7 @@ const EditWellnessBoardModal = ({
             />
             <TextField
               type="file"
-              // value={data?.boardPicture}
-              // defaultValue={data?.boardPicture}
+              //   defaultValue={data?.boardPicture}
               name="boardPicture"
               size="small"
               fullWidth
@@ -122,7 +121,6 @@ const EditWellnessBoardModal = ({
           </Button>
           <Button
             variant="contained"
-            color="warning"
             onClick={handleClose}
             sx={{ mt: 2, marginRight: "1rem" }}
           >

@@ -6,7 +6,7 @@ const ConfirmationModal = ({
   handleClose,
   handleAction,
   warningMsg,
-  modalFor
+  modalFor,
 }) => {
   const style = {
     position: "absolute",
@@ -15,9 +15,10 @@ const ConfirmationModal = ({
     transform: "translate(-50%, -50%)",
     width: 400,
     bgcolor: "background.paper",
-    border: "2px solid",
+    // border: "2px solid",
     borderColor: "info.dark",
     boxShadow: 24,
+    borderRadius: "10px",
     p: 4,
   };
 
@@ -34,8 +35,8 @@ const ConfirmationModal = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography variant="h4" color={"primary"}>
-            Are you sure ? You want to {warningMsg}  {modalFor} !
+          <Typography variant="h4">
+            Are you sure ? You want to {warningMsg} {modalFor} !
           </Typography>
           {/* <Stack>
             <Typography>Are You sure ?</Typography>
@@ -47,15 +48,11 @@ const ConfirmationModal = ({
             alignItems={"center"}
             justifyContent={"start"}
           >
-            <Button variant="outlined" color="inherit" onClick={handleClose}>
-              close
+            <Button variant="contained" onClick={handleClose}>
+              cancel
             </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handlePerformAction}
-            >
-              Confirm
+            <Button variant="contained" onClick={handlePerformAction}>
+              Delete
             </Button>
           </Stack>
         </Box>

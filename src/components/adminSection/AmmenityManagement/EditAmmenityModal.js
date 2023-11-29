@@ -110,7 +110,6 @@ const EditAmmenityModal = ({
           </Button>
           <Button
             variant="contained"
-            color="warning"
             onClick={handleClose}
             sx={{ mt: 2, marginRight: "1rem" }}
           >

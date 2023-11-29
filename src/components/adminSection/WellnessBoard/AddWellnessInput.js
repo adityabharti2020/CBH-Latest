@@ -39,7 +39,7 @@ const AddWellnessInput = () => {
     percent: "",
   });
   const [updateImage, setupdateImage] = useState(null);
-  console.log(updateData)
+  console.log(updateData);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     // const newValue = type === 'file' ? files[0] : value;
@@ -52,6 +52,7 @@ const AddWellnessInput = () => {
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(isLoading(true));
@@ -64,26 +65,24 @@ const AddWellnessInput = () => {
     // for (const value of formData.values()) {
     //     console.log(value);
     //   }
-
+    setImage("");
     try {
       const res = await axios.post(
         `/api/v1/admin/create/wellness/board/data`,
         formdata
       );
 
-      
       console.log("create Wellness Board", res.data);
       if (res?.data.success === true) {
         setwellnessField({
           cardHeading: "",
           percent: "",
         });
-        setImage(null);
+        setImage("");
         dispatch(isLoading(false));
         dispatch(openSnackbar("Wellness Added Successfully", "success"));
-       
+
         wellnessData();
-        
       }
     } catch (error) {
       console.log(error);
@@ -168,6 +167,16 @@ const AddWellnessInput = () => {
   };
   return (
     <>
+      <Stack
+        display={"flex"}
+        flexDirection={"row"}
+        justifyContent={"space-between"}
+        marginBottom={2}
+      >
+        <Typography variant="h4" component="h2" sx={{ color: "#9f2936" }}>
+          Wellness Board Management
+        </Typography>
+      </Stack>
       <form onSubmit={handleSubmit}>
         <Grid container rowGap={1} columnGap={1}>
           <Grid
@@ -176,17 +185,17 @@ const AddWellnessInput = () => {
             container
             rowGap={1}
             columnGap={1}
-            xs={12}
+            // xs={12}
             sx={{ position: "relative" }}
-            md={5.75}
-            justifyContent={"start"}
+            // md={5.75}
+            justifyContent={"space-between"}
             p={1}
-            border={"1px solid black"}
+            // border={"1px solid black"}
             alignItems={"center"}
             mt={1.5}
             direction={"row"}
           >
-            <Grid item xs={12} sm={4.75}>
+            <Grid item xs={12} sm={3.75}>
               <TextField
                 name="cardHeading"
                 required
@@ -198,7 +207,7 @@ const AddWellnessInput = () => {
                 onChange={(event) => handleInputChange(event)}
               />
             </Grid>
-            <Grid item xs={12} sm={2.75}>
+            <Grid item xs={12} sm={3.75}>
               <TextField
                 // sx={{ marginLeft: "1rem" }}
                 className="textfield"
@@ -206,13 +215,13 @@ const AddWellnessInput = () => {
                 size="small"
                 fullWidth
                 required
-                type="string"
+                type="number"
                 label="Percentage %"
                 value={wellnessField?.percent}
                 onChange={(event) => handleInputChange(event)}
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={3.75}>
               <TextField
                 // sx={{ marginLeft: "1rem" }}
                 id="outlined-adornment-amount"
@@ -222,7 +231,6 @@ const AddWellnessInput = () => {
                 fullWidth
                 required
                 type="file"
-                // value={image}
                 // label="Board Picture"
                 onChange={(event) => handleImageChange(event)}
               />
@@ -231,6 +239,8 @@ const AddWellnessInput = () => {
         </Grid>
         <Button
           type="submit"
+          variant="contained"
+          size="small"
           style={{ margin: "10px", border: "1px solid #9f2936" }}
         >
           Submit

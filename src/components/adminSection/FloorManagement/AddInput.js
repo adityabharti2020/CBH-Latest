@@ -3,7 +3,6 @@ import {
   Button,
   Grid,
   IconButton,
-  Input,
   Stack,
   TextField,
   Typography,
@@ -55,6 +54,12 @@ const AddInput = () => {
 
   const handleInputChange = (event, index) => {
     const values = [...inputFields];
+    const inputValues = event.target.value;
+    if (inputValues !== "" && Number(inputValues) < 0) {
+      setInputFields("");
+      // alert("Please enter a non-negative value.");
+      dispatch(openSnackbar("Please enter a non-negative value.", "error"));
+    }
     values[index] = {
       ...values[index],
       [event.target.name]: event.target.value,
@@ -68,16 +73,27 @@ const AddInput = () => {
     e.preventDefault();
     dispatch(isLoading(true));
     // console.log("floorsFields:", inputFields);
+    // Check if any floorNo, ratePerSqFt, or gstRate is negative
+    const hasNegativeValues = inputFields.some(
+      (field) => field.floorNo < 0 || field.ratePerSqFt < 0 || field.gstRate < 0
+    );
+
+    if (hasNegativeValues) {
+      dispatch(isLoading(false));
+      dispatch(openSnackbar("Floor values cannot be negative", "error"));
+      return;
+    }
+
     try {
       const res = await axios.post(`/api/v1/building/create/building/floor`, {
         floors: [...inputFields],
       });
-      // console.log("createFloor", res?.data?.message);
+      console.log("createFloor", res?.data);
       if (res.data.success === true) {
         dispatch(isLoading(false));
         dispatch(openSnackbar("Floor Added Successfully", "success"));
         getFloorData();
-        const d = [{ floorNo: "", ratePerSqFt: "", gstRate: null }];
+        const d = [{ floorNo: "", ratePerSqFt: "", gstRate: "" }];
         setInputFields([...d]);
       }
     } catch (error) {
@@ -108,7 +124,26 @@ const AddInput = () => {
   // ==============================================
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        marginBottom={2}
+      >
+        <Typography variant="h4" color={"#9f2936"} component="h2">
+          Create Floor
+        </Typography>
+        <Button
+          type="button"
+          variant="contained"
+          size="small"
+          onClick={handleAddField}
+          startIcon={<Iconify icon="fluent:add-12-filled" />}
+        >
+          add floor
+        </Button>
+      </Stack>
+      <form style={{ marginTop: 10 }} onSubmit={handleSubmit}>
         <Grid
           container
           rowGap={2}
@@ -123,13 +158,16 @@ const AddInput = () => {
               container
               key={index}
               columnGap={1}
+              rowGap={1}
               display={"flex"}
               justifyContent={"space-between"}
-              border={"1px solid"}
-              sm={5.75}
+              // border={"1px solid"}
+              // sm={3.75}
+              sm={12}
               position={"relative"}
             >
-              <Grid xs={12} sm={5.75}>
+              {/* sm={5.75} */}
+              <Grid xs={12} sm={3.75}>
                 <TextField
                   name="floorNo"
                   size="small"
@@ -142,22 +180,22 @@ const AddInput = () => {
                   onChange={(event) => handleInputChange(event, index)}
                 />
               </Grid>
-              <Grid xs={12} sm={5.75}>
+              <Grid xs={12} sm={3.75}>
                 <TextField
-                  style={{ marginTop: "0.5rem" }}
+                  // style={{ marginTop: "0.5rem" }}
                   className="textfield"
                   name="ratePerSqFt"
                   size="small"
                   fullWidth
                   required
                   type="number"
-                  label="Enter Floor ratePerSqFt"
-                  placeholder="Enter Floor ratePerSqft"
+                  label="Enter Floor Rate/Sqft"
+                  placeholder="Enter Floor Rate/Sqft"
                   value={inputField?.ratePerSqFt}
                   onChange={(event) => handleInputChange(event, index)}
                 />
               </Grid>
-              <Grid xs={12} sm={5.75}>
+              <Grid xs={12} sm={3.75}>
                 <TextField
                   className="textfield"
                   name="gstRate"
@@ -165,39 +203,49 @@ const AddInput = () => {
                   fullWidth
                   required
                   type="number"
-                  label="Enter GstRate%"
-                  placeholder="Enter gstRate %"
+                  label="Enter Gst Rate%"
+                  placeholder="Enter Gst Rate %"
                   value={inputField?.gstRate}
                   onChange={(event) => handleInputChange(event, index)}
                 />
               </Grid>
-              <Box sx={{ position: "absolute", top: -14, right: -8 }}>
-                <IconButton
-                  onClick={() => handleRemove(index)}
-                  sx={{
-                    color: "#9f2936",
-                    bgcolor: "rgba(233,206,198,1)",
-                    height: "30px",
-                    width: "30px",
-                  }}
-                >
-                  <Iconify icon="radix-icons:cross-2" />
-                </IconButton>
+
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: -14,
+                  right: -8,
+                }}
+              >
+                {inputFields?.length !== 1 && (
+                  <IconButton
+                    onClick={() => handleRemove(index)}
+                    sx={{
+                      color: "#9f2936",
+                      bgcolor: "rgba(233,206,198,1)",
+                      height: "30px",
+                      width: "30px",
+                    }}
+                  >
+                    <Iconify icon="radix-icons:cross-2" />
+                  </IconButton>
+                )}
               </Box>
             </Grid>
           ))}
         </Grid>
-        <Stack mt={2} direction={"row"}>
+        {/* <Stack mt={2} direction={"row"} justifyContent={"end"}>
           <Button
             type="button"
-            variant="outlined"
+            variant="contained"
             size="small"
             onClick={handleAddField}
             startIcon={<Iconify icon="fluent:add-12-filled" />}
           >
-            add more
+            add floor
           </Button>
-        </Stack>
+         
+        </Stack> */}
         <Stack mt={2} direction={"row"}>
           <Button
             type="submit"
@@ -211,7 +259,7 @@ const AddInput = () => {
         </Stack>
       </form>
       <Box>
-        <Stack mt={2}>
+        <Stack sx={{ color: "#9f2936", mt: 2 }}>
           <Typography variant="h4">All Floors</Typography>
         </Stack>
         <Grid container columnGap={1} rowGap={1}>
@@ -219,7 +267,11 @@ const AddInput = () => {
             return (
               <Grid
                 item
-                xs={2}
+                // xs={2}
+                xs={12}
+                sm={5.75}
+                md={3.75}
+                lg={2.75}
                 key={index}
                 flexDirection={"row"}
                 sx={{
@@ -280,7 +332,10 @@ const AddInput = () => {
                 >
                   <Stack direction={"row"}>
                     <IconButton
-                      sx={{ color: "white" }}
+                      sx={{
+                        color: "white",
+                        // fontSize: { xs: "24px", md: "36px" },
+                      }}
                       onClick={() => handleOpenEditModal(data)}
                     >
                       <Iconify icon="mingcute:edit-line" />

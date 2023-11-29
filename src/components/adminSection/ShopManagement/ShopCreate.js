@@ -11,9 +11,9 @@ const ShopCreate = () => {
             item
             style={{ margin: "0.8rem", color: "#9f2936", width: "100%" }}
           >
-            <Typography variant="h4" component="h2">
+            {/* <Typography variant="h4" component="h2">
               Create Shop
-            </Typography>
+            </Typography> */}
 
             <AddInputRow />
           </Grid>

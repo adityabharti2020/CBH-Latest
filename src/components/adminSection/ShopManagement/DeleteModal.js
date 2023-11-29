@@ -67,15 +67,23 @@ const DeleteModal = ({ id, getFloorData }) => {
           }}
         >
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Floor Delete Modal
+            Delete Floor
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Are You Sure to want to delete this floor
+            Are you sure to want to delete this Floor ?
           </Typography>
-          <Button onClick={handleOpen} sx={{ mt: 2, marginRight: "1rem" }}>
+          <Button
+            variant="contained"
+            onClick={handleOpen}
+            sx={{ mt: 2, marginRight: "1rem" }}
+          >
             Cancel
           </Button>
-          <Button onClick={() => handleDelete(id)} sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            onClick={() => handleDelete(id)}
+            sx={{ mt: 2 }}
+          >
             Delete
           </Button>
         </Box>

@@ -22,7 +22,8 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  // border: "2px solid #000",
+  borderRadius: "10px",
   boxShadow: 24,
   p: 4,
 };
@@ -99,10 +100,9 @@ const EditShop = ({ data, shopId }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          '
           <Stack>
             <Typography variant="h5" color={"#9f2936"}>
-              Update shop Details
+              Update Shop Details
             </Typography>
           </Stack>
           <Stack mt={2} spacing={2}>
@@ -159,7 +159,7 @@ const EditShop = ({ data, shopId }) => {
             <Button variant="contained" onClick={handleSubmit}>
               Update
             </Button>
-            <Button variant="contained" color="warning" onClick={handleClose}>
+            <Button variant="contained" onClick={handleClose}>
               Close
             </Button>
           </Stack>
