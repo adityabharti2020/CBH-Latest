@@ -28,7 +28,7 @@ import {
   Box,
 } from "@mui/material";
 // components
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   DataGrid,
   GridToolbar,
@@ -50,7 +50,9 @@ import Scrollbar from "../components/scrollbar";
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
 import USERLIST from "../_mock/user";
-
+import UserProfileModal from "./UserProfileModal";
+import UserDetailsEditModel from "./UserDetailsEditModel";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 // ----------------------------------------------------------------------
 
 function CustomeGridToolbar() {
@@ -90,7 +92,9 @@ function CustomeToolBar() {
         }}
       >
         <Box width="100%" sx={{ p: 2 }}>
-          <GridToolbarQuickFilter
+          <CustomeGridToolbar />
+
+          {/* <GridToolbarQuickFilter
             fullWidth
             variant="outlined"
             size="small"
@@ -101,7 +105,7 @@ function CustomeToolBar() {
                 borderColor: "rgba(158, 158, 158, 1)",
               },
             }}
-          />
+          /> */}
         </Box>
       </Grid>
       <Grid
@@ -113,11 +117,11 @@ function CustomeToolBar() {
           alignItems: "center",
           display: "flex",
           direction: "row",
-          justifyContent: "end",
+          justifyContent: "start",
         }}
       >
         {/* <GridToolbar /> */}
-        <CustomeGridToolbar />
+        {/* <CustomeGridToolbar /> */}
       </Grid>
     </Grid>
   );
@@ -171,7 +175,7 @@ export default function UserPage() {
 
   const [order, setOrder] = useState("asc");
 
-  const [selected, setSelected] = useState([]);
+  const [selected,  setSelected] = useState([]);
 
   const [orderBy, setOrderBy] = useState("name");
 
@@ -181,15 +185,62 @@ export default function UserPage() {
   const [userDetails, setUserDetails] = useState();
 
   const [Filter, setFilter] = useState();
+  const [activeData, setActiveData] = useState(null);
+  const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [OpenUserEditModal, setOpenUserEditModal] = useState(false);
 
-  const handleOpenMenu = (event) => {
+  const [userId, setuserId] = useState(null);
+  const [editActiveData, setEditActiveData] = useState(null);
+  const [updatedata, setUpdatedData] = useState({
+    contactNo: "",
+    email: "",
+    shops: [],
+  });
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const handleOpenMenu = (event, data) => {
+    console.log(data._id);
+    setuserId(data._id);
+    setEditActiveData(data);
+
     setOpen(event.currentTarget);
   };
 
   const handleCloseMenu = () => {
     setOpen(null);
   };
-
+  const handleUserDelete = async () => {
+    // console.log(userId);
+    handleCloseMenu();
+    dispatch(isLoading(true));
+    try {
+      const response = await axios.delete(
+        `/api/v1/admin/delete/user/${userId}`
+      );
+      // console.log(response);
+      // console.log(response?.data?.success);
+      if (response?.data?.success === true) {
+        getAllusers();
+        // handleClose()
+      }
+      dispatch(openSnackbar("User deleted successfully", "success"));
+      dispatch(isLoading(false));
+    } catch (error) {
+      // console.log(error);
+      dispatch(openSnackbar("something went wrong", "error"));
+      dispatch(isLoading(false));
+    }
+  };
+  const toggleProfileModal = () => setOpenProfileModal(!openProfileModal);
+  const toggleConfirmationModal = () =>
+    setOpenConfirmationModal(!openConfirmationModal);
+  const handleDeleteConfirmationModal = () => {
+    // console.log("hello");
+    toggleConfirmationModal();
+    setOpen(null);
+  };
+  const handleCloseConfirmationModal = () => {
+    toggleConfirmationModal();
+  };
   // ***********************Filter section Function***********************
 
   const handleChangeFilter = (event) => {
@@ -283,7 +334,7 @@ export default function UserPage() {
       const response = await axios.post(
         `/api/v1/admin/create/invoice/${event}`
       );
-      console.log("invoice=>", response);
+      // console.log("invoice=>", response);
       if (response?.status === 200) {
         setUserDetails(response.data);
         // navigate("/dashboard/createInvoice", { event });
@@ -296,22 +347,79 @@ export default function UserPage() {
     }
   };
   // table fields
+  const openProfileModalHandler = (data) => {
+    setActiveData(data);
+    toggleProfileModal();
+    // console.log(data)
+  };
+  const profileCloseHandlerModal = () => {
+    setActiveData(null);
+    toggleProfileModal();
+  };
+  const toggleUserEditModal = () => setOpenUserEditModal(!OpenUserEditModal);
+
+  const handleOpenUserEditModal = () => {
+    // console.log(data)
+    setOpen(null);
+    toggleUserEditModal();
+  };
+  const handleCloseUserEditModal = () => {
+    setEditActiveData(null);
+    setOpen(null);
+
+    toggleUserEditModal();
+  };
+  const UserUpdateHandler = async () => {
+    dispatch(isLoading(true));
+    // console.log("update api =>", updatedata);
+    try {
+      const response = await axios.put(
+        `/api/v1/admin/update/user/and/shops/alloted/${userId}`,
+        {
+          contactNo: updatedata.contactNo,
+          email: updatedata.email,
+          shopsAlloted: updatedata.shops,
+        }
+      );
+      // console.log(response);
+      // console.log(updatedata);
+      if (response?.statusText === "OK") {
+        getAllusers();
+      }
+      handleCloseUserEditModal();
+      dispatch(openSnackbar("User Details updated", "success"));
+      dispatch(isLoading(false));
+    } catch (error) {
+      console.log(error);
+      dispatch(openSnackbar("something went wrong", "error"));
+      dispatch(isLoading(false));
+    }
+  };
   const columns = [
-    { field: "index", headerName: "Sr No.", width: 40 },
+    { field: "index", headerName: "Sr No.", width: 60 },
     {
       field: "firstName",
-      headerName: "First name",
+      headerName: "Name",
       width: 200,
       editable: false,
       renderCell: (params) => {
         return (
           <>
-            <Avatar
-              alt={params?.row?.firstName}
-              src={`${params?.row?.profilePicture}`}
-            />
-            &nbsp;&nbsp;
-            {`${params?.row?.firstName} ${params?.row?.lastName}`}
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={2}
+              sx={{ display: "flex", cursor: "pointer" }}
+              onClick={() => openProfileModalHandler(params?.row?._id)}
+            >
+              <Avatar
+                alt={params?.row?.firstName}
+                src={`${params?.row?.profilePicture}`}
+              />
+              <Typography variant="subtitle2" noWrap sx={{ cursor: "pointer" }}>
+                {`${params?.row?.firstName} ${params?.row?.lastName}`}
+              </Typography>
+            </Stack>
           </>
         );
       },
@@ -344,24 +452,29 @@ export default function UserPage() {
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 170,
+
       renderCell: (params) => {
         return (
           <>
             <TextField
               select
               value={shop}
-              defaultValue={params?.row?.shopsAlloted[0]?._id}
+              defaultValue={"--"}
               fullWidth
               size="small"
-              placeholder="select shop id"
+              placeholder="Select Shop"
               onChange={(e) => {
                 handleChange(e, params?.row?._id);
               }}
             >
+              <MenuItem disabled value={"--"}>
+                --select--
+              </MenuItem>
               {params?.row?.shopsAlloted?.map((shop, rowIndex) => {
+                // console.log(`double oops ${rowIndex}  => `,shop)
                 return (
                   <MenuItem key={rowIndex} value={shop._id}>
-                    {shop.shopNo}
+                    {`Shop No.${shop.shopNo}`}
                   </MenuItem>
                 );
               })}
@@ -373,14 +486,19 @@ export default function UserPage() {
     {
       field: "action",
       headerName: "Action",
-      width: 120,
+      width: 180,
       renderCell: (params) => {
         return (
           <>
-            <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+            <IconButton
+              size="large"
+              color="inherit"
+              onClick={(event) => handleOpenMenu(event, params?.row)}
+              sx={{ ml: 3 }}
+            >
               <Iconify
                 icon={"eva:more-vertical-fill"}
-                onClick={() => handlechange(params?.row?._id)}
+                // onClick={() => handlechange(params?.row?._id)}
               />
             </IconButton>
           </>
@@ -413,7 +531,7 @@ export default function UserPage() {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" gutterBottom sx={{ color: " #9F2936" }}>
             User
           </Typography>
           <Button
@@ -435,20 +553,23 @@ export default function UserPage() {
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 5,
+                    pageSize: 10,
                   },
                 },
               }}
               components={{
                 HeaderCell: ({ field }) => (
+                  
                   <div
                     style={{
                       whiteSpace: "nowrap",
                       textOverflow: "unset",
                       overflow: "visible",
+                      backgroundColor:"black",
+                      color:"white"
                     }}
                   >
-                    {field}
+                    {/* {field} */}
                   </div>
                 ),
               }}
@@ -493,9 +614,19 @@ export default function UserPage() {
           },
         }}
       >
-        <MenuItem sx={{ color: "error.main" }}>
+        <MenuItem
+          sx={{ color: "error.main" }}
+          onClick={handleDeleteConfirmationModal}
+        >
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
           Delete
+        </MenuItem>
+        <MenuItem
+          sx={{ color: "error.main" }}
+          onClick={handleOpenUserEditModal}
+        >
+          <Iconify icon={"mingcute:edit-line"} sx={{ mr: 2 }} />
+          Edit
         </MenuItem>
         <MenuItem
           sx={{ color: "error.main" }}
@@ -512,6 +643,28 @@ export default function UserPage() {
           Invoice
         </MenuItem>
       </Popover>
+      <UserProfileModal
+        open={openProfileModal}
+        data={activeData}
+        handleClose={profileCloseHandlerModal}
+      />
+      <UserDetailsEditModel
+        data={editActiveData}
+        userId={userId}
+        getAllusers={getAllusers}
+        open={OpenUserEditModal}
+        handleClose={handleCloseUserEditModal}
+        updatedata={updatedata}
+        setUpdatedData={setUpdatedData}
+        handleAction={UserUpdateHandler}
+      />
+      <DeleteConfirmationModal
+        open={openConfirmationModal}
+        handleClose={handleCloseConfirmationModal}
+        handleAction={handleUserDelete}
+        warningMsg={"delete"}
+        modalFor="User"
+      />
     </>
   );
 }

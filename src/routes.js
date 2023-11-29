@@ -62,7 +62,7 @@ export default function Router() {
         },
         { path: "/dashboard/wellnessboard", element: <AddWellnessBoard /> },
         { path: "/dashboard/requests", element: <AmmenityRequestHome /> },
-        // { path: "/dashboard/createInvoice", element: <CreateInvoiceForm /> },
+        { path: "/dashboard/createInvoice", element: <CreateInvoiceForm /> },
         {
           path: "/dashboard/maintenanceRequestModal",
           element: <RequestAcceptModal />,

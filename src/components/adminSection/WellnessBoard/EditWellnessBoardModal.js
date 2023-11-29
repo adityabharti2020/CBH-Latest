@@ -104,7 +104,8 @@ const EditWellnessBoardModal = ({
             />
             <TextField
               type="file"
-              //   defaultValue={data?.boardPicture}
+              // value={data?.boardPicture}
+              // defaultValue={data?.boardPicture}
               name="boardPicture"
               size="small"
               fullWidth

@@ -32,7 +32,7 @@ const CreateInvoiceForm = () => {
       const res = await axios.post(
         `/api/v1/admin/create/invoice/${userDetails?.state?.idShop}/${userDetails.state.shop}`
       );
-      // console.log("getData", res?.data);
+      console.log("getData", res?.data);
       dispatch(isLoading(false));
       setData(res?.data);
     } catch (error) {
@@ -52,6 +52,11 @@ const CreateInvoiceForm = () => {
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    if(userDetails){
+      console.log(userDetails);
+    }
+  })
   console.log(ref);
   const properties = { header: "Acme" };
   return (

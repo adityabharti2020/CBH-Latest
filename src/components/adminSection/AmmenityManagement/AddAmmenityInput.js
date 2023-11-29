@@ -180,6 +180,9 @@ const AddAmmenityInput = () => {
   };
   return (
     <>
+    {/* <Stack sx={{display:"flex",justifyContent:}}>
+
+    </Stack> */}
       <form onSubmit={handleSubmit}>
         <Grid container rowGap={1} columnGap={1}>
           {inputFields?.map((inputField, index) => (
@@ -276,13 +279,15 @@ const AddAmmenityInput = () => {
         <Button
           type="button"
           onClick={handleAddField}
-          style={{ margin: "10px" }}
+          style={{ margin: "10px", backgroundColor: " #9F2936",
+          color: "white", }}
         >
           Add Input Field
         </Button>
         <Button
           type="submit"
-          style={{ margin: "10px", border: "1px solid blue" }}
+          style={{ margin: "10px",  backgroundColor: " #9F2936",
+          color: "white", }}
         >
           Submit
         </Button>

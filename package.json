@@ -1,6 +1,6 @@
 {
   "name": "society-management",
-  "proxy": "http://192.168.29.32:5001",
+  "proxy": "http://192.168.29.180:5001",
   "author": "minimals.cc",
   "licence": "MIT",
   "version": "1.7.0",
@@ -44,6 +44,7 @@
     "@emotion/styled": "^11.11.0",
     "@faker-js/faker": "^7.6.0",
     "@iconify/react": "^4.1.0",
+    "@mui/base": "^5.0.0-beta.24",
     "@mui/icons-material": "^5.14.12",
     "@mui/joy": "^5.0.0-beta.8",
     "@mui/lab": "^5.0.0-alpha.103",
@@ -52,6 +53,7 @@
     "@mui/x-date-pickers": "^6.16.2",
     "@mui/x-date-pickers-pro": "^6.16.2",
     "apexcharts": "^3.37.0",
+    "autosuggest-highlight": "^3.3.4",
     "axios": "^1.5.1",
     "change-case": "^4.1.2",
     "date-fns": "^2.29.3",

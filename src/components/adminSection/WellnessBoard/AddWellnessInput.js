@@ -78,7 +78,7 @@ const AddWellnessInput = () => {
           cardHeading: "",
           percent: "",
         });
-        setImage("");
+        setImage(null);
         dispatch(isLoading(false));
         dispatch(openSnackbar("Wellness Added Successfully", "success"));
        
